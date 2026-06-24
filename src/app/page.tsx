@@ -348,7 +348,7 @@ export default function Home() {
         <div className="sticky top-0 w-full h-screen flex items-center justify-center pointer-events-none">
           <canvas
             ref={canvasRef}
-            className="w-full h-full object-cover md:object-contain mix-blend-screen"
+            className="w-full h-full object-contain mix-blend-screen"
           />
         </div>
       </div>
