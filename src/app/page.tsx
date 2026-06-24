@@ -102,6 +102,17 @@ export default function Home() {
   const [cart, setCart] = useState<{name: string, price: number, qty: number}[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // Checkout form state
+  const [orderType, setOrderType] = useState<'delivery' | 'pickup'>('delivery');
+  const [customerName, setCustomerName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [flat, setFlat] = useState('');
+  const [street, setStreet] = useState('');
+  const [landmark, setLandmark] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [specialInstructions, setSpecialInstructions] = useState('');
+  const city = 'Hanamkonda';
+
   // Canvas Scroll Preloader Config
   const TOTAL_FRAMES = 191;
   const FRAME_PREFIX = "frame_";
@@ -261,11 +272,43 @@ export default function Home() {
     setIsCartOpen(true);
   };
 
+  const increaseQty = (name: string) => {
+    setCart(prev => prev.map(i => i.name === name ? { ...i, qty: i.qty + 1 } : i));
+  };
+
+  const decreaseQty = (name: string) => {
+    setCart(prev => {
+      const item = prev.find(i => i.name === name);
+      if (!item) return prev;
+      if (item.qty === 1) return prev.filter(i => i.name !== name);
+      return prev.map(i => i.name === name ? { ...i, qty: i.qty - 1 } : i);
+    });
+  };
+
+  const removeFromCart = (name: string) => {
+    setCart(prev => prev.filter(i => i.name !== name));
+  };
+
   const checkoutWhatsApp = () => {
-    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const text = `👑 *MAJESTY MANDI HOUSE ORDER* 👑%0A%0A` + 
-                 cart.map(i => `${i.qty}x ${i.name} - ₹${i.price * i.qty}`).join('%0A') + 
-                 `%0A%0A*Total: ₹${total}*`;
+    const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const gst = Math.round(subtotal * 0.05);
+    const grandTotal = subtotal + gst;
+    const itemLines = cart.map((i, n) => `${n + 1}. ${i.qty}x ${i.name} — ₹${i.price * i.qty}`).join('\n');
+    const addressLine = orderType === 'delivery'
+      ? `\n\n*ADDRESS:* ${flat}, ${street}${landmark ? ', ' + landmark : ''}, ${city}${pincode ? ' — ' + pincode : ''}`
+      : '';
+    const notesLine = specialInstructions ? `\n*Notes:* ${specialInstructions}` : '';
+    const text = encodeURIComponent(
+      `🛎️ *NEW ORDER — MAJESTY MANDI HOUSE* 🛎️\n\n` +
+      `*Type:* ${orderType === 'delivery' ? '🚗 Home Delivery' : '🏠 Pickup'}\n` +
+      `*Customer:* ${customerName || 'N/A'}\n` +
+      `*Phone:* ${phone || 'N/A'}\n\n` +
+      `*ITEMS:*\n${itemLines}\n\n` +
+      `*Subtotal:* ₹${subtotal}\n` +
+      `*GST (5%):* ₹${gst}\n` +
+      `*Grand Total:* ₹${grandTotal}` +
+      addressLine + notesLine
+    );
     window.open(`https://wa.me/918121213533?text=${text}`, '_blank');
   };
 
@@ -299,30 +342,137 @@ export default function Home() {
       {/* ═══════════════ CART DRAWER OVERLAY ═══════════════ */}
       {isCartOpen && (
         <div className="fixed inset-0 bg-black/80 z-[100] flex justify-end">
-          <div className="w-full sm:max-w-md bg-[#121212] h-full p-4 sm:p-6 flex flex-col border-l border-[#DFB15B] shadow-2xl">
-            <div className="flex justify-between items-center mb-6 sm:mb-8 border-b border-neutral-800 pb-4">
+          <div className="w-full sm:max-w-md bg-[#121212] h-full flex flex-col border-l border-[#DFB15B] shadow-2xl">
+
+            {/* ── Drawer Header ── */}
+            <div className="flex justify-between items-center px-4 sm:px-6 py-4 border-b border-neutral-800 shrink-0">
               <h2 className="text-xl sm:text-2xl font-serif text-[#DFB15B]">Your Order</h2>
               <button onClick={() => setIsCartOpen(false)} className="text-white text-xl font-bold hover:text-red-500 p-1">✕</button>
             </div>
-            <div className="flex-1 overflow-y-auto">
+
+            {/* ── Scrollable Body ── */}
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4">
+
+              {/* Order Type Toggle */}
+              <div className="flex rounded-xl overflow-hidden border border-neutral-700 text-sm font-bold">
+                <button
+                  onClick={() => setOrderType('delivery')}
+                  className={`flex-1 py-2.5 transition-colors ${
+                    orderType === 'delivery' ? 'bg-[#DFB15B] text-black' : 'bg-neutral-900 text-neutral-400 hover:text-white'
+                  }`}
+                >
+                  🚗 Home Delivery
+                </button>
+                <button
+                  onClick={() => setOrderType('pickup')}
+                  className={`flex-1 py-2.5 transition-colors ${
+                    orderType === 'pickup' ? 'bg-[#DFB15B] text-black' : 'bg-neutral-900 text-neutral-400 hover:text-white'
+                  }`}
+                >
+                  🏠 Pickup
+                </button>
+              </div>
+
+              {/* Cart Items */}
               {cart.length === 0 ? (
-                <p className="text-neutral-500 text-center mt-10 text-sm">Your cart is empty.</p>
+                <p className="text-neutral-500 text-center py-8 text-sm">Your cart is empty. Browse the menu below.</p>
               ) : (
-                cart.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center mb-3 bg-neutral-900 p-3 sm:p-4 rounded-lg border border-neutral-800">
-                    <span className="font-medium text-sm sm:text-base">{item.qty}x {item.name}</span>
-                    <span className="text-[#DFB15B] font-bold text-sm sm:text-base ml-2 shrink-0">₹{item.price * item.qty}</span>
-                  </div>
-                ))
+                <div className="space-y-2">
+                  {cart.map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between bg-neutral-900 p-3 rounded-lg border border-neutral-800 gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm truncate">{item.name}</p>
+                        <p className="text-[#DFB15B] text-xs font-bold mt-0.5">₹{item.price * item.qty}</p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button onClick={() => decreaseQty(item.name)} className="w-7 h-7 rounded-full bg-neutral-700 hover:bg-red-500 text-white font-bold text-base flex items-center justify-center transition-colors">−</button>
+                        <span className="w-5 text-center font-bold text-sm">{item.qty}</span>
+                        <button onClick={() => increaseQty(item.name)} className="w-7 h-7 rounded-full bg-neutral-700 hover:bg-[#DFB15B] hover:text-black text-white font-bold text-base flex items-center justify-center transition-colors">+</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Customer Details & Address Form */}
+              {cart.length > 0 && (
+                <div className="space-y-2.5">
+                  <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold border-t border-neutral-800 pt-4">Customer Details</p>
+                  <input
+                    value={customerName} onChange={e => setCustomerName(e.target.value)}
+                    placeholder="Full Name *"
+                    className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 transition-colors"
+                  />
+                  <input
+                    value={phone} onChange={e => setPhone(e.target.value)}
+                    placeholder="Mobile Number *" type="tel"
+                    className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 transition-colors"
+                  />
+
+                  {orderType === 'delivery' && (
+                    <>
+                      <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold border-t border-neutral-800 pt-3">Delivery Address</p>
+                      <input
+                        value={flat} onChange={e => setFlat(e.target.value)}
+                        placeholder="Flat / House No. *"
+                        className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 transition-colors"
+                      />
+                      <input
+                        value={street} onChange={e => setStreet(e.target.value)}
+                        placeholder="Street / Area *"
+                        className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 transition-colors"
+                      />
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          value={landmark} onChange={e => setLandmark(e.target.value)}
+                          placeholder="Landmark"
+                          className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 transition-colors"
+                        />
+                        <input
+                          value={pincode} onChange={e => setPincode(e.target.value)}
+                          placeholder="Pincode" type="number"
+                          className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 transition-colors"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <textarea
+                    value={specialInstructions} onChange={e => setSpecialInstructions(e.target.value)}
+                    placeholder="Special Instructions (optional)..." rows={2}
+                    className="w-full bg-neutral-900 border border-neutral-800 text-white text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-[#DFB15B] placeholder:text-neutral-600 resize-none transition-colors"
+                  />
+                </div>
               )}
             </div>
-            <button 
-              onClick={checkoutWhatsApp} 
-              disabled={cart.length === 0}
-              className="w-full py-3 sm:py-4 bg-[#DFB15B] text-black font-bold text-base sm:text-lg rounded-xl mt-4 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F3A833] transition-colors"
-            >
-              SEND ORDER TO WHATSAPP
-            </button>
+
+            {/* ── Footer: Bill + Checkout ── */}
+            {cart.length > 0 && (() => {
+              const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+              const gst = Math.round(subtotal * 0.05);
+              const grandTotal = subtotal + gst;
+              return (
+                <div className="px-4 sm:px-6 py-4 border-t border-neutral-800 shrink-0 bg-[#0f0f0f]">
+                  <div className="space-y-1.5 mb-3">
+                    <div className="flex justify-between text-sm text-neutral-400">
+                      <span>Subtotal</span><span className="text-white font-medium">₹{subtotal}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-neutral-400">
+                      <span>GST (5%)</span><span className="text-white font-medium">₹{gst}</span>
+                    </div>
+                    <div className="flex justify-between text-base font-bold text-[#DFB15B] border-t border-neutral-800 pt-2">
+                      <span>Grand Total</span><span>₹{grandTotal}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={checkoutWhatsApp}
+                    className="w-full py-3 sm:py-4 bg-[#DFB15B] text-black font-bold text-base sm:text-lg rounded-xl hover:bg-[#F3A833] transition-colors"
+                  >
+                    📲 SEND ORDER TO WHATSAPP
+                  </button>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}
@@ -415,12 +565,23 @@ export default function Home() {
               </div>
               <h4 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2" style={{ transform: 'translateZ(15px)' }}>{item.name}</h4>
               <p className="text-[#DFB15B] font-bold text-lg sm:text-xl mb-4 sm:mb-6" style={{ transform: 'translateZ(12px)' }}>₹{item.price}</p>
-              <MagneticButton
-                onClick={() => addToCart(item)}
-                className="w-full py-3 bg-neutral-800 text-white border border-[#DFB15B] font-bold text-sm sm:text-base rounded-lg hover:bg-[#DFB15B] hover:text-black transition-colors lg:cursor-none cursor-auto"
-              >
-                ADD TO ORDER
-              </MagneticButton>
+              {(() => {
+                const cartItem = cart.find(i => i.name === item.name);
+                return cartItem ? (
+                  <div className="flex items-center justify-between w-full bg-[#DFB15B]/10 border border-[#DFB15B]/50 rounded-full px-4 py-2.5">
+                    <button onClick={() => decreaseQty(item.name)} className="w-8 h-8 rounded-full bg-[#DFB15B] text-black font-bold text-lg flex items-center justify-center hover:bg-[#F3A833] transition-colors">−</button>
+                    <span className="text-[#DFB15B] font-bold text-base">{cartItem.qty} in cart</span>
+                    <button onClick={() => increaseQty(item.name)} className="w-8 h-8 rounded-full bg-[#DFB15B] text-black font-bold text-lg flex items-center justify-center hover:bg-[#F3A833] transition-colors">+</button>
+                  </div>
+                ) : (
+                  <MagneticButton
+                    onClick={() => addToCart(item)}
+                    className="w-full py-3 bg-neutral-800 text-white border border-[#DFB15B] font-bold text-sm sm:text-base rounded-lg hover:bg-[#DFB15B] hover:text-black transition-colors lg:cursor-none cursor-auto"
+                  >
+                    ADD TO ORDER
+                  </MagneticButton>
+                );
+              })()}
             </TiltCard>
           ))}
         </motion.div>
