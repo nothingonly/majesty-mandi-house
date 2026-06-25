@@ -114,10 +114,10 @@ export function CanvasHero() {
 
       {/* ═══════════════ SCROLL-BOUND CANVAS SECTION ═══════════════ */}
       <div ref={scrollContainerRef} className="relative w-full h-[300vh] bg-[#0A0A0B]">
-        <div className="sticky top-0 w-full h-screen flex items-center justify-center pointer-events-none">
+        <div className="sticky top-0 w-full h-[100dvh] flex items-center justify-center pointer-events-none">
           <canvas
             ref={canvasRef}
-            className="w-full h-full object-contain mix-blend-screen scale-[1.7] sm:scale-125 md:scale-100"
+            className="w-full h-full object-contain mix-blend-screen portrait:scale-[1.8] landscape:scale-100"
           />
         </div>
       </div>

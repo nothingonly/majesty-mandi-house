@@ -6,6 +6,8 @@ import { CartDrawer } from '@/components/layout/CartDrawer';
 import { MenuGrid } from '@/components/sections/MenuGrid';
 import { AmbianceGallery } from '@/components/sections/AmbianceGallery';
 import { PhysicalMenuCTA } from '@/components/sections/PhysicalMenuCTA';
+import { TableReservation } from '@/components/sections/TableReservation';
+import { BirthdayPromoModal } from '@/components/ui/BirthdayPromoModal';
 import { CartItem, MenuItem } from '@/types';
 
 export default function Home() {
@@ -37,6 +39,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#0A0A0B] text-white font-sans overflow-clip relative selection:bg-[#DFB15B] selection:text-[#0A0A0B]">
       <div id="home" className="absolute top-0 left-0 w-full h-[1px] pointer-events-none" />
+      <BirthdayPromoModal />
       {/* ═══════════════ TOP BANNER ═══════════════ */}
       <div className="w-full bg-gradient-to-r from-[#DFB15B] via-[#F3A833] to-[#DFB15B] text-black text-center py-2.5 font-bold text-xs sm:text-sm tracking-wide z-50 relative border-b border-[#0A0A0B]">
         🎓 Exclusive Offer: 10% Discount available with a valid Student ID (Dine-in only).
@@ -87,6 +90,7 @@ export default function Home() {
 
       <PhysicalMenuCTA />
       <AmbianceGallery />
+      <TableReservation />
 
       {/* ═══════════════ FOOTER & CONTACT ═══════════════ */}
       <footer id="contact" className="w-full bg-[#0A0A0B] py-16 px-4 sm:px-6 md:px-12 border-t border-neutral-900 mt-20">
