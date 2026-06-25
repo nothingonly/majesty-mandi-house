@@ -67,7 +67,7 @@ export default function Hero() {
               className="w-full h-full relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(223,177,91,0.15)] border border-white/5 cursor-pointer"
             >
               <Image 
-                src="/chicken juicy mandi.png" 
+                src="/dishes/chicken juicy mandi.png" 
                 alt="Chicken Juicy Mandi" 
                 fill 
                 className="object-contain"

@@ -5,13 +5,14 @@ import Image from 'next/image';
 
 export function AmbianceGallery() {
   const galleryImages = [
-    "/outer view.jpeg",
-    "/inner view.jpg",
-    "/inner view 2.jpg",
-    "/inner view 3.jpg",
-    "/dinning place 1.jpg",
-    "/dinning place 2.jpg",
-    "/dinning place 3.jpg",
+    "/ambiance/outer view.jpeg",
+    "/ambiance/inner view.jpg",
+    "/ambiance/inner view 2.jpg",
+    "/ambiance/inner view 3.jpg",
+    "/ambiance/inner view of majesty.jpg",
+    "/ambiance/dinning place 1.jpg",
+    "/ambiance/dinning place 2.jpg",
+    "/ambiance/dinning place 3.jpg",
   ];
 
   return (
@@ -27,7 +28,7 @@ export function AmbianceGallery() {
         >
           {galleryImages.map((img, idx) => (
             <div 
-              key={idx} 
+              key={img} 
               className={`relative w-full overflow-hidden rounded-2xl bg-[#161618] border border-neutral-800 shadow-2xl group ${
                 idx === 0 || idx === 3 ? 'md:col-span-2 aspect-[16/9]' : 'aspect-square'
               }`}

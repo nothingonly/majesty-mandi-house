@@ -19,7 +19,7 @@ export default function Preloader() {
     >
       <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-[0_0_80px_20px_rgba(223,177,91,0.5)] border-2 border-[#DFB15B]">
         <Image 
-          src="/logo.jpg" 
+          src="/brand/logo.jpg" 
           alt="Majesty Mandi House Logo" 
           fill 
           className="object-cover"

@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export function PhysicalMenuCTA() {
   return (
@@ -25,15 +26,13 @@ export function PhysicalMenuCTA() {
         <p className="text-neutral-400 text-sm sm:text-base md:text-lg mb-10 max-w-xl mx-auto leading-relaxed">
           Our physical menu features the complete selection of our Royal Mandi specialties, authentic Arabian drinks, and exclusive seasonal offerings.
         </p>
-        <a
-          href="/menu.jpg"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/physical-menu"
           className="inline-flex items-center gap-3 px-10 py-4 rounded-full border border-[#DFB15B]/50 bg-[#DFB15B]/5 text-[#DFB15B] font-bold text-sm sm:text-base hover:bg-[#DFB15B] hover:text-black transition-all duration-500 shadow-[0_0_20px_rgba(223,177,91,0.1)] hover:shadow-[0_0_40px_rgba(223,177,91,0.3)]"
         >
           <span>View Physical Menu</span>
           <span className="text-xl font-light">↗</span>
-        </a>
+        </Link>
       </motion.div>
     </section>
   );

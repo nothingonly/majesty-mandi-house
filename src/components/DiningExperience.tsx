@@ -21,7 +21,7 @@ export default function DiningExperience() {
       >
         <div className="relative w-full h-full">
           <Image 
-            src="/dinning place 1.jpg" 
+            src="/ambiance/dinning place 1.jpg" 
             alt="Dining Experience" 
             fill 
             className="object-cover"

@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="relative w-12 h-12 rounded-full overflow-hidden border border-imperial/30 shadow-[0_0_15px_rgba(223,177,91,0.2)]">
-            <Image src="/logo.jpg" alt="Majesty Mandi House Logo" fill className="object-cover" />
+            <Image src="/brand/logo.jpg" alt="Majesty Mandi House Logo" fill className="object-cover" />
           </div>
           <span className="font-serif text-xl font-bold tracking-wider text-imperial hidden sm:block">
             MAJESTY

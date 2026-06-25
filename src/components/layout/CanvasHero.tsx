@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-const heroImages = ["/chicken juicy mandi.png", "/mutton juicy mandi.png", "/fish platter mandi.png"];
+const heroImages = ["/dishes/chicken juicy mandi.png", "/dishes/mutton juicy mandi.png", "/dishes/fish platter mandi.png"];
 
 export function CanvasHero() {
   const TOTAL_FRAMES = 191;
@@ -105,7 +105,7 @@ export function CanvasHero() {
         <div className="fixed inset-0 bg-[#0A0A0B] z-[999] flex items-center justify-center transition-opacity duration-700">
           <div className="flex flex-col items-center gap-6">
             <div className="relative w-32 h-32 rounded-full border-2 border-[#DFB15B] shadow-[0_0_50px_10px_rgba(223,177,91,0.6)] animate-pulse overflow-hidden">
-              <Image src="/logo.jpg" alt="Majesty Mandi House Logo" fill className="object-cover" sizes="128px" priority />
+              <Image src="/brand/logo.jpg" alt="Majesty Mandi House Logo" fill className="object-cover" sizes="128px" priority />
             </div>
             <span className="text-[#DFB15B] font-serif text-xl tracking-[0.3em] uppercase animate-pulse">Majesty</span>
           </div>

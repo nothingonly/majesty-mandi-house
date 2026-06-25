@@ -7,8 +7,8 @@ interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   cart: CartItem[];
-  onIncrease: (name: string) => void;
-  onDecrease: (name: string) => void;
+  onIncrease: (id: string, portion: string) => void;
+  onDecrease: (id: string, portion: string) => void;
 }
 
 export function CartDrawer({ isOpen, onClose, cart, onIncrease, onDecrease }: CartDrawerProps) {
@@ -24,10 +24,10 @@ export function CartDrawer({ isOpen, onClose, cart, onIncrease, onDecrease }: Ca
   const city = 'Hanamkonda';
 
   const checkoutWhatsApp = () => {
-    const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const subtotal = cart.reduce((sum, i) => sum + i.prices[i.selectedPortion] * i.qty, 0);
     const gst = Math.round(subtotal * 0.05);
     const grandTotal = subtotal + gst;
-    const itemLines = cart.map((i, n) => `${n + 1}. ${i.qty}x ${i.name} — ₹${i.price * i.qty}`).join('\n');
+    const itemLines = cart.map((i, n) => `${n + 1}. ${i.qty}x ${i.name} (${i.selectedPortion}) — ₹${i.prices[i.selectedPortion] * i.qty}`).join('\n');
     const addressLine = orderType === 'delivery'
       ? `\n\n*ADDRESS:* ${flat}, ${street}${landmark ? ', ' + landmark : ''}, ${city}${pincode ? ' — ' + pincode : ''}`
       : '';
@@ -95,16 +95,16 @@ export function CartDrawer({ isOpen, onClose, cart, onIncrease, onDecrease }: Ca
                 <p className="text-neutral-500 text-center py-8 text-sm font-medium">Your cart is empty. Browse the menu below.</p>
               ) : (
                 <div className="space-y-2">
-                  {cart.map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between bg-[#161618] p-3 rounded-lg border border-neutral-800 gap-2">
+                  {cart.map((item) => (
+                    <div key={`${item.id}-${item.selectedPortion}`} className="flex items-center justify-between bg-[#161618] p-3 rounded-lg border border-neutral-800 gap-2">
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm truncate">{item.name}</p>
-                        <p className="text-[#DFB15B] text-xs font-bold mt-0.5">₹{item.price * item.qty}</p>
+                        <p className="font-medium text-sm truncate">{item.name} <span className="text-neutral-500 text-xs">({item.selectedPortion})</span></p>
+                        <p className="text-[#DFB15B] text-xs font-bold mt-0.5">₹{item.prices[item.selectedPortion] * item.qty}</p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <button onClick={() => onDecrease(item.name)} className="w-7 h-7 rounded-full bg-neutral-800 hover:bg-red-500 text-white font-bold text-base flex items-center justify-center transition-colors">−</button>
+                        <button onClick={() => onDecrease(item.id, item.selectedPortion)} className="w-7 h-7 rounded-full bg-neutral-800 hover:bg-red-500 text-white font-bold text-base flex items-center justify-center transition-colors">−</button>
                         <span className="w-5 text-center font-bold text-sm">{item.qty}</span>
-                        <button onClick={() => onIncrease(item.name)} className="w-7 h-7 rounded-full bg-neutral-800 hover:bg-[#DFB15B] hover:text-black text-white font-bold text-base flex items-center justify-center transition-colors">+</button>
+                        <button onClick={() => onIncrease(item.id, item.selectedPortion)} className="w-7 h-7 rounded-full bg-neutral-800 hover:bg-[#DFB15B] hover:text-black text-white font-bold text-base flex items-center justify-center transition-colors">+</button>
                       </div>
                     </div>
                   ))}
@@ -165,7 +165,7 @@ export function CartDrawer({ isOpen, onClose, cart, onIncrease, onDecrease }: Ca
 
             {/* ── Footer: Bill + Checkout ── */}
             {cart.length > 0 && (() => {
-              const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+              const subtotal = cart.reduce((s, i) => s + i.prices[i.selectedPortion] * i.qty, 0);
               const gst = Math.round(subtotal * 0.05);
               const grandTotal = subtotal + gst;
               return (

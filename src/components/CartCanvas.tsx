@@ -30,7 +30,7 @@ export default function CartCanvas() {
       currency: "INR",
       name: "Majesty Mandi House",
       description: "Premium Arabian Dining",
-      image: "https://your-domain.com/logo.jpg", // Ideally an absolute URL
+      image: "https://your-domain.com/brand/logo.jpg", // Ideally an absolute URL
       handler: function (response: any) {
         // Payment successful
         const paymentId = response.razorpay_payment_id;

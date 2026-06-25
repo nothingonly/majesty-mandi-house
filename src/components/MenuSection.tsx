@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 
 const menuItems = [
-  { id: "1", name: "Chicken Juicy Mandi", price: 350, image: "/chicken juicy mandi.png" },
-  { id: "2", name: "Mutton Juicy Mandi", price: 450, image: "/mutton juicy mandi.png" },
-  { id: "3", name: "Chicken Faham Mandi", price: 380, image: "/chicken faham Mandi.png" },
-  { id: "4", name: "Fish Platter Mandi", price: 500, image: "/fish platter mandi.png" },
-  { id: "5", name: "Chicken Madfoon Mandi", price: 400, image: "/chicken madfoon Mandi.png" },
-  { id: "6", name: "Chicken Majestic", price: 280, image: "/chicken majestic.png" },
+  { id: "1", name: "Chicken Juicy Mandi", price: 350, image: "/dishes/chicken juicy mandi.png" },
+  { id: "2", name: "Mutton Juicy Mandi", price: 450, image: "/dishes/mutton juicy mandi.png" },
+  { id: "3", name: "Chicken Faham Mandi", price: 380, image: "/dishes/chicken faham mandi.png" },
+  { id: "4", name: "Fish Platter Mandi", price: 500, image: "/dishes/fish platter mandi.png" },
+  { id: "5", name: "Chicken Madfoon Mandi", price: 400, image: "/dishes/chicken madfoon mandi.png" },
+  { id: "6", name: "Chicken Majestic", price: 280, image: "/dishes/chicken majestic.png" },
   { id: "7", name: "Royal Arabian Mix Mandi", price: 850, image: "" }, // Intentional missing image for skeleton
 ];
 
@@ -21,7 +21,7 @@ export default function MenuSection() {
     <section id="menu" className="bg-[#0B0B0C] relative pb-32">
       {/* 1. Standalone Background Banner */}
       <div className="relative w-full h-48 md:h-64 mb-12 flex items-center justify-center overflow-hidden">
-        <Image src="/menu.jpg" alt="Menu Header" fill className="object-cover opacity-60" priority />
+        <Image src="/menu/menu-main.jpg" alt="Menu Header" fill className="object-cover opacity-60" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C] to-transparent" />
         <motion.h2 
           initial={{ opacity: 0, scale: 0.9 }}

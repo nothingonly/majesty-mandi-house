@@ -1,10 +1,13 @@
 export interface MenuItem {
+  id: string;
   name: string;
-  img: string;
-  price: number;
   category: string;
+  prices: Record<string, number>;
+  image: string;
+  description?: string;
 }
 
 export interface CartItem extends MenuItem {
   qty: number;
+  selectedPortion: string;
 }
