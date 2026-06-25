@@ -32,7 +32,7 @@ export default function Ambiance() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
-          {images.map((img, idx) => (
+          {ambianceImages.map((img, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, scale: 0.95 }}
