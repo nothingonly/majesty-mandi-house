@@ -112,7 +112,7 @@ export default function Home() {
                   Above ARAVIND STORE, 2nd Floor KSR Plaza<br />
                   Kishanapura, Naimnagar<br />
                   Hanamkonda, Telangana<br /><br />
-                  <span className="text-[#DFB15B] font-bold">WhatsApp:</span> 9502316909
+                  <span className="text-[#DFB15B] font-bold">WhatsApp:</span> 8121213533
                 </p>
               </div>
             </div>
