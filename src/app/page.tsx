@@ -28,10 +28,17 @@ export default function Home() {
   };
 
   const decreaseQty = (id: string, portion: string) => {
-    setCart(prev => prev.map(i => {
-      if (i.id === id && i.selectedPortion === portion && i.qty > 1) return { ...i, qty: i.qty - 1 };
-      return i;
-    }).filter(i => !(i.id === id && i.selectedPortion === portion && i.qty === 0))); // Filter out items that drop to 0
+    setCart(prev => {
+      const existing = prev.find(i => i.id === id && i.selectedPortion === portion);
+      if (existing && existing.qty === 1) {
+        return prev.filter(i => !(i.id === id && i.selectedPortion === portion));
+      }
+      return prev.map(i => 
+        (i.id === id && i.selectedPortion === portion) 
+          ? { ...i, qty: i.qty - 1 } 
+          : i
+      );
+    });
   };
 
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);

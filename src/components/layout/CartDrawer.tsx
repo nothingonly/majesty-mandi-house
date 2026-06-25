@@ -69,7 +69,7 @@ export function CartDrawer({ isOpen, onClose, cart, onIncrease, onDecrease }: Ca
             </div>
 
             {/* ── Scrollable Body ── */}
-            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 space-y-4" data-lenis-prevent="true" onWheel={(e) => e.stopPropagation()}>
               {/* Order Type Toggle */}
               <div className="flex rounded-xl overflow-hidden border border-neutral-800 text-sm font-bold">
                 <button
